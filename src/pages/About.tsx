@@ -303,25 +303,36 @@ export default function About() {
             Our Journey
           </h2>
 
-          <div className="relative border-l-2 border-primary/30 pl-6 max-w-3xl mx-auto">
-            {timeline.map((item, idx) => (
-              <motion.article
-                key={`${item.year}-${item.event.slice(0, 12)}`}
-                {...fadeLeft(30)}
-                transition={{ delay: idx * (prefersReducedMotion ? 0 : 0.2), duration: 0.4 }}
-                className="mb-10 relative"
-                aria-label={`Milestone ${idx + 1}: ${item.year}`}
-              >
-                <div
-                  className="absolute -left-3 w-6 h-6 rounded-full bg-primary text-white text-xs font-bold grid place-items-center"
-                  aria-hidden="true"
+          <div className="relative max-w-4xl mx-auto">
+            {/* Timeline line */}
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/70 to-primary/30"></div>
+            
+            <div className="space-y-8">
+              {timeline.map((item, idx) => (
+                <motion.article
+                  key={`${item.year}-${item.event.slice(0, 12)}`}
+                  {...fadeLeft(30)}
+                  transition={{ delay: idx * (prefersReducedMotion ? 0 : 0.2), duration: 0.4 }}
+                  className="relative flex items-start gap-6"
+                  aria-label={`Milestone ${idx + 1}: ${item.year}`}
                 >
-                  {idx + 1}
-                </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-foreground">{item.year}</h3>
-                <p className="text-muted-foreground">{item.event}</p>
-              </motion.article>
-            ))}
+                  {/* Timeline dot */}
+                  <div className="relative z-10 flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center shadow-lg ring-4 ring-background">
+                      <span className="text-white font-bold text-sm">{idx + 1}</span>
+                    </div>
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="flex-1 min-w-0 pt-2">
+                    <div className="glass-card p-6 rounded-xl hover-lift">
+                      <h3 className="text-xl sm:text-2xl font-bold text-primary mb-2">{item.year}</h3>
+                      <p className="text-muted-foreground leading-relaxed text-base sm:text-lg">{item.event}</p>
+                    </div>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
           </div>
         </motion.section>
       </main>

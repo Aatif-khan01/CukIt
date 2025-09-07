@@ -53,8 +53,8 @@ export function Navigation() {
     <motion.header 
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled 
-          ? "glass-card backdrop-blur-xl border-b border-glass-border/50" 
+        scrolled || isOpen
+          ? "glass-card backdrop-blur-xl border-b border-glass-border/50"
           : "bg-transparent"
       )}
       initial={{ y: -100 }}
@@ -136,6 +136,8 @@ export function Navigation() {
               size="icon"
               className="lg:hidden w-9 h-9"
               onClick={() => setIsOpen(!isOpen)}
+              aria-expanded={isOpen}
+              aria-label={isOpen ? "Close menu" : "Open menu"}
             >
               {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
@@ -149,7 +151,7 @@ export function Navigation() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden border-t border-glass-border/50"
+              className="lg:hidden border-t border-glass-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 rounded-b-xl shadow-lg"
             >
               <div className="py-4 space-y-2">
                 {navigationItems.map((item, index) => (
@@ -166,7 +168,7 @@ export function Navigation() {
                         "flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors",
                         location.pathname === item.href
                           ? "bg-primary/10 text-primary border border-primary/20"
-                          : "text-foreground/80 hover:text-foreground hover:bg-glass/50"
+                          : "text-foreground/90 hover:text-foreground hover:bg-glass/50"
                       )}
                     >
                       <item.icon className="w-5 h-5" />

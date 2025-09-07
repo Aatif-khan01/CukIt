@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
+
 const navigationItems = [
   { name: "Home", href: "/", icon: Home },
   { name: "About", href: "/about", icon: Info },
@@ -38,16 +39,19 @@ const navigationItems = [
   { name: "Admin", href: "/admin", icon: Shield }
 ]
 
+
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
+
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
 
   return (
     <motion.header 
@@ -78,6 +82,7 @@ export function Navigation() {
             </div>
           </motion.div>
 
+
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-1">
             {navigationItems.map((item, index) => (
@@ -101,6 +106,7 @@ export function Navigation() {
                   <span>{item.name}</span>
                   {item.submenu && <ChevronDown className="w-3 h-3" />}
                 </Link>
+
 
                 {/* Submenu */}
                 {item.submenu && (
@@ -126,10 +132,12 @@ export function Navigation() {
             ))}
           </div>
 
+
           {/* Mobile Menu Button (keeps spacing from removed theme toggle) */}
           <div className="flex items-center space-x-2">
             {/* Spacer to keep layout same size where theme toggle was */}
             <div className="w-9 h-9" />
+
 
             <Button
               variant="ghost"
@@ -144,14 +152,19 @@ export function Navigation() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+
+        {/* Mobile Navigation - FIXED SECTION */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden border-t border-glass-border/50 bg-background rounded-b-xl shadow-lg"
+              className={cn(
+                "lg:hidden border-t border-glass-border/50 backdrop-blur-xl rounded-b-xl shadow-lg",
+                // Match the header's background style
+                "bg-background/40 supports-[backdrop-filter]:bg-background/20"
+              )}
             >
               <div className="py-4 space-y-2">
                 {navigationItems.map((item, index) => (

@@ -151,7 +151,7 @@ export function Navigation() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden border-t border-glass-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 rounded-b-xl shadow-lg"
+              className="lg:hidden border-t border-glass-border/50 bg-background rounded-b-xl shadow-lg"
             >
               <div className="py-4 space-y-2">
                 {navigationItems.map((item, index) => (

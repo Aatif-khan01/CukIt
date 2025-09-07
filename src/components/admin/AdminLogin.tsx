@@ -5,58 +5,27 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Lock, User, Eye, EyeOff } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { Lock, User } from 'lucide-react';
 
 export function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
-  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
-    // Basic validation
-    if (!email || !password) {
-      setError('Please fill in all fields');
-      setIsLoading(false);
-      return;
-    }
-
-    if (!email.includes('@')) {
-      setError('Please enter a valid email address');
-      setIsLoading(false);
-      return;
-    }
-
     try {
       const success = await login(email, password);
       if (!success) {
         setError('Invalid email or password');
-        toast({
-          title: "Login Failed",
-          description: "Invalid email or password. Please try again.",
-          variant: "destructive"
-        });
-      } else {
-        toast({
-          title: "Login Successful",
-          description: "Welcome to the admin dashboard!",
-        });
       }
     } catch (err) {
       setError('Login failed. Please try again.');
-      toast({
-        title: "Login Error",
-        description: "An error occurred during login. Please try again.",
-        variant: "destructive"
-      });
     } finally {
       setIsLoading(false);
     }
@@ -104,20 +73,13 @@ export function AdminLogin() {
                 <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="password"
-                  type={showPassword ? "text" : "password"}
+                  type="password"
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10"
+                  className="pl-10"
                   required
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 h-4 w-4 text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
               </div>
             </div>
 
@@ -129,6 +91,14 @@ export function AdminLogin() {
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
+
+          <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+            <p className="text-sm text-muted-foreground mb-2">Demo Credentials:</p>
+            <div className="text-xs space-y-1">
+              <div>Admin: admin@college.edu / admin123</div>
+              <div>HOD: hod@college.edu / hod123</div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -4,7 +4,7 @@ import { Layout } from "@/components/layout"
 import { HeroSection } from "@/components/hero-section"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { BookOpen, Calendar, Building, Globe, ArrowRight, Target, Eye, Users, Award } from "lucide-react"
+import { BookOpen, Calendar, Building, Globe, ArrowRight, Target, Eye, Users, Award, FileText } from "lucide-react"
 import { Link } from "react-router-dom"
 
 import { SectionHeader } from "@/components/home/section-header"
@@ -17,11 +17,15 @@ import { CoordinatorMessage } from "@/components/CoordinatorMessage"
 import { useFeaturedFaculty } from "@/hooks/useFaculty"
 import { usePrograms } from "@/hooks/usePrograms"
 import { LoadingGrid } from "@/components/loading-spinner"
+import { useEvents } from "@/hooks/useEvents"
+import { usePublishedNews } from "@/hooks/useNews"
 
 export default function Home() {
   const [showFullCoordinatorMessage, setShowFullCoordinatorMessage] = useState(false)
   const { faculty: featuredFaculty, loading: facultyLoading } = useFeaturedFaculty()
   const { programs, loading: programsLoading } = usePrograms()
+  const { events, loading: eventsLoading } = useEvents()
+  const { news, loading: newsLoading } = usePublishedNews()
   
   return (
     <Layout>
@@ -130,6 +134,104 @@ export default function Home() {
 
         
 
+        {/* Notices & Updates Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <SectionHeader 
+            title="Notices &"
+            highlightText="Updates"
+            description="Recent notices, events, and announcements"
+          />
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+            <Card className="glass-card h-full">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <FileText className="w-5 h-5 text-primary" />
+                  <h3 className="text-lg font-semibold">Latest Notices</h3>
+                </div>
+                <div className="space-y-4">
+                  {(newsLoading ? Array.from({ length: 3 }) : news.slice(0,3)).map((item:any, idx:number) => (
+                    <div key={idx} className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <p className="text-sm text-foreground/90 line-clamp-2">
+                          {newsLoading ? 'Loading…' : item.title}
+                        </p>
+                        {!newsLoading && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {item.publish_date ? new Date(item.publish_date).toLocaleDateString() : new Date(item.created_at).toLocaleDateString()}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 text-right">
+                  <Button asChild variant="outline" size="sm">
+                    <Link to="/events">View all updates</Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="glass-card h-full">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Calendar className="w-5 h-5 text-primary" />
+                  <h3 className="text-lg font-semibold">Upcoming Events</h3>
+                </div>
+                <div className="space-y-4">
+                  {(eventsLoading ? Array.from({ length: 3 }) : events.slice(0,3)).map((event:any, idx:number) => (
+                    <div key={idx} className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <p className="text-sm text-foreground/90 line-clamp-2">
+                          {eventsLoading ? 'Loading…' : event.title}
+                        </p>
+                        {!eventsLoading && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {new Date(event.date_time).toLocaleDateString()} • {event.venue}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-6 text-right">
+                  <Button asChild variant="outline" size="sm">
+                    <Link to="/events">View calendar</Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </motion.section>
+
+        {/* Programs Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <SectionHeader 
+            title="Academic"
+            highlightText="Programs"
+            description="Comprehensive programs designed to prepare students for successful careers in Computer Science and Engineering"
+          />
+
+            {programsLoading ? (
+            <LoadingGrid items={3} className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3" cardClassName="h-96" />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {programs.slice(0, 3).map((program, index) => (
+                <ProgramCard key={program.id} program={program} index={index} />
+              ))}
+            </div>
+            )}
+        </motion.section>
+
         {/* Featured Faculty Section */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
@@ -162,29 +264,6 @@ export default function Home() {
               </Link>
             </Button>
           </div>
-        </motion.section>
-
-        {/* Programs Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <SectionHeader 
-            title="Academic"
-            highlightText="Programs"
-            description="Comprehensive programs designed to prepare students for successful careers in Computer Science and Engineering"
-          />
-
-            {programsLoading ? (
-            <LoadingGrid items={3} className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3" cardClassName="h-96" />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {programs.slice(0, 3).map((program, index) => (
-                <ProgramCard key={program.id} program={program} index={index} />
-              ))}
-            </div>
-            )}
         </motion.section>
 
         {/* Mission & Vision Section */}

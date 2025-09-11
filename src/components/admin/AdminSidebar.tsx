@@ -32,7 +32,7 @@ const adminMenuItems = [
   { title: 'Dashboard', url: '/admin', icon: BarChart3, exactPath: true },
   { title: 'Faculty Management', url: '/admin/faculty', icon: Users },
   { title: 'Events Management', url: '/admin/events', icon: Calendar },
-  { title: 'Study Materials', url: '/admin/materials', icon: BookOpen },
+  { title: 'Content', url: '/admin/materials', icon: BookOpen },
   { title: 'Gallery Management', url: '/admin/gallery', icon: Images },
   { title: 'News & Articles', url: '/admin/news', icon: Newspaper },
   { title: 'Backup & Restore', url: '/admin/backup', icon: Database },

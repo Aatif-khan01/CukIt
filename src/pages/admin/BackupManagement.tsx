@@ -61,7 +61,7 @@ const mockBackups = [
     size: '1.8 GB',
     status: 'completed',
     duration: '28 minutes',
-    includes: ['Study Materials', 'Gallery', 'Documents']
+    includes: ['Content', 'Gallery', 'Documents']
   },
   {
     id: 4,

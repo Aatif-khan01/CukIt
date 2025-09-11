@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import { Layout } from "@/components/layout"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { 
@@ -21,6 +22,7 @@ export default function Faculty() {
   const { faculty: facultyMembers, loading } = useFaculty()
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedSpecialization, setSelectedSpecialization] = useState("")
+  const [sortBy, setSortBy] = useState("name")
 
   const allSpecializations = Array.from(
     new Set(facultyMembers.flatMap(faculty => faculty.specialization))
@@ -37,6 +39,10 @@ export default function Faculty() {
                                  faculty.specialization.includes(selectedSpecialization)
     
     return matchesSearch && matchesSpecialization
+  }).sort((a, b) => {
+    if (sortBy === "name") return a.name.localeCompare(b.name)
+    if (sortBy === "designation") return a.designation.localeCompare(b.designation)
+    return 0
   })
 
   if (loading) {
@@ -95,6 +101,15 @@ export default function Faculty() {
               {allSpecializations.map(spec => (
                 <option key={spec} value={spec}>{spec}</option>
               ))}
+            </select>
+
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-4 py-2 rounded-lg glass-card border border-glass-border/50 bg-background text-foreground"
+            >
+              <option value="name">Sort: Name (A–Z)</option>
+              <option value="designation">Sort: Designation</option>
             </select>
           </div>
         </motion.div>
@@ -186,14 +201,42 @@ export default function Faculty() {
                   </div>
 
                   {/* Full Profile Button */}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="w-full text-primary hover:bg-primary/10"
-                  >
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    View Full Profile
-                  </Button>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="w-full text-primary hover:bg-primary/10"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Quick Profile
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl w-full">
+                      <div className="flex gap-4">
+                        <div className="w-28 h-28 rounded-full overflow-hidden bg-muted flex items-center justify-center">
+                          {faculty.photo_url ? (
+                            <img src={faculty.photo_url} alt={`${faculty.name} profile`} className="w-full h-full object-cover" />
+                          ) : (
+                            <User className="w-10 h-10" />
+                          )}
+                        </div>
+                        <div className="space-y-1">
+                          <h3 className="text-xl font-semibold">{faculty.name}</h3>
+                          <p className="text-primary">{faculty.designation}</p>
+                          <p className="text-sm text-muted-foreground">{faculty.education}</p>
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <h4 className="font-semibold mb-2">Research Areas</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {faculty.specialization.map((s) => (
+                            <Badge key={s} variant="secondary">{s}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </CardContent>
               </Card>
             </motion.div>

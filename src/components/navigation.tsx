@@ -12,8 +12,7 @@ import {
   Camera,
   Phone,
   Home,
-  Info,
-  Shield
+  Info
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -24,7 +23,7 @@ const navigationItems = [
   { name: "About", href: "/about", icon: Info },
   { name: "Programs", href: "/programs", icon: GraduationCap },
   { name: "Faculty", href: "/faculty", icon: Users },
-  { name: "Materials", href: "/study-materials", icon: BookOpen },
+  { name: "Content", href: "/study-materials", icon: BookOpen },
   { 
     name: "Notices", 
     href: "/events", 
@@ -36,7 +35,7 @@ const navigationItems = [
   },
   { name: "Gallery", href: "/gallery", icon: Camera },
   { name: "Contact", href: "/contact", icon: Phone },
-  { name: "Admin", href: "/admin", icon: Shield }
+  
 ]
 
 
@@ -84,7 +83,7 @@ export function Navigation() {
 
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-1">
+          <div className="hidden lg:flex items-center space-x-1 ml-auto">
             {navigationItems.map((item, index) => (
               <motion.div
                 key={item.name}

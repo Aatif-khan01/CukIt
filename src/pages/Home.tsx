@@ -1,4 +1,5 @@
 import { motion } from "framer-motion"
+import { useState } from "react"
 import { Layout } from "@/components/layout"
 import { HeroSection } from "@/components/hero-section"
 import { Button } from "@/components/ui/button"
@@ -18,6 +19,7 @@ import { usePrograms } from "@/hooks/usePrograms"
 import { LoadingGrid } from "@/components/loading-spinner"
 
 export default function Home() {
+  const [showFullCoordinatorMessage, setShowFullCoordinatorMessage] = useState(false)
   const { faculty: featuredFaculty, loading: facultyLoading } = useFeaturedFaculty()
   const { programs, loading: programsLoading } = usePrograms()
   
@@ -27,24 +29,6 @@ export default function Home() {
       <HeroSection />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-24 lg:space-y-32">
-        {/* Department Overview */}
-        <motion.section
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="py-20"
-        >
-          <SectionHeader 
-            title="Department of"
-            highlightText="Information Technology"
-            description="Central University of Kashmir's Department of Information Technology is a premier institution dedicated to fostering innovation, research excellence, and developing future technology leaders. Our world-class faculty and state-of-the-art facilities provide students with an unparalleled learning experience in the ever-evolving field of Information Technology."
-            maxWidth="max-w-4xl"
-          />
-
-          <DepartmentStats />
-        </motion.section>
-
-
         {/* HOD Message Section */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
@@ -90,26 +74,61 @@ export default function Home() {
                   <p>
                     It is with great excitement and pride that I welcome you to the Department of Information Technology at the Central University of Kashmir. This marks a significant milestone in our collective journey, symbolizing a new chapter in our department's story one dedicated to capturing the essence of our academic pursuits, our groundbreaking achievements, and the vibrant spirit of collaboration that defines us.
                   </p>
-                  <p>
-                    The realm of Information Technology is not merely evolving; it is accelerating at a breathtaking pace, continuously redefining the limits of what is possible. From the intricate algorithms of artificial intelligence and machine learning that anticipate our needs, to the robust frameworks of cybersecurity that safeguard our digital lives, and the distributed architectures of blockchain and cloud computing that power modern enterprises these are not just subjects we teach, but the very fabric of the future we are helping to shape.
-                  </p>
-                  <p>
-                    In this dynamic and demanding landscape, our mission is clear: to provide an education that is both deeply foundational and fiercely contemporary, ensuring our graduates are not just participants but architects of the global tech ecosystem. At the Department of Information Technology, we have consciously built a learning environment alive with possibility. Our programs, designed in line with the guiding principles of the National Education Policy (NEP) 2020, promote a holistic, flexible, and experiential model of education.
-                  </p>
-                  <p>
-                    We believe true learning happens at the intersection of theory and practice. That is why our pedagogy is enriched with industry-driven projects, cutting-edge research opportunities with faculty, internships at leading tech firms, and a vibrant calendar of competitive events such as coding marathons and cybersecurity capture-the-flag exercises. These experiences are indispensable, transforming abstract knowledge into tangible skill and fostering essential qualities such as leadership, teamwork, and resilient problem-solving.
-                  </p>
-                  <p>
-                    None of this would be possible without the collective effort of our incredible community. I extend my sincerest appreciation to our faculty members, whose mentorship extends far beyond the classroom and whose research endeavours set a powerful example. To our students, your curiosity and drive to excel are the true inspiration behind our progress.
-                  </p>
-                  <p>
-                    As we continue to grow, I invite each one of you to actively contribute to our shared journey through your projects, research, innovations, and perspectives on emerging technologies. Together, let us build a dynamic academic and professional space that reflects our highest aspirations, amplifies our successes, and captures the limitless potential we hold as the IT community of Central University of Kashmir.
-                  </p>
+
+                  {showFullCoordinatorMessage && (
+                    <>
+                      <p>
+                        The realm of Information Technology is not merely evolving; it is accelerating at a breathtaking pace, continuously redefining the limits of what is possible. From the intricate algorithms of artificial intelligence and machine learning that anticipate our needs, to the robust frameworks of cybersecurity that safeguard our digital lives, and the distributed architectures of blockchain and cloud computing that power modern enterprises these are not just subjects we teach, but the very fabric of the future we are helping to shape.
+                      </p>
+                      <p>
+                        In this dynamic and demanding landscape, our mission is clear: to provide an education that is both deeply foundational and fiercely contemporary, ensuring our graduates are not just participants but architects of the global tech ecosystem. At the Department of Information Technology, we have consciously built a learning environment alive with possibility. Our programs, designed in line with the guiding principles of the National Education Policy (NEP) 2020, promote a holistic, flexible, and experiential model of education.
+                      </p>
+                      <p>
+                        We believe true learning happens at the intersection of theory and practice. That is why our pedagogy is enriched with industry-driven projects, cutting-edge research opportunities with faculty, internships at leading tech firms, and a vibrant calendar of competitive events such as coding marathons and cybersecurity capture-the-flag exercises. These experiences are indispensable, transforming abstract knowledge into tangible skill and fostering essential qualities such as leadership, teamwork, and resilient problem-solving.
+                      </p>
+                      <p>
+                        None of this would be possible without the collective effort of our incredible community. I extend my sincerest appreciation to our faculty members, whose mentorship extends far beyond the classroom and whose research endeavours set a powerful example. To our students, your curiosity and drive to excel are the true inspiration behind our progress.
+                      </p>
+                      <p>
+                        As we continue to grow, I invite each one of you to actively contribute to our shared journey through your projects, research, innovations, and perspectives on emerging technologies. Together, let us build a dynamic academic and professional space that reflects our highest aspirations, amplifies our successes, and captures the limitless potential we hold as the IT community of Central University of Kashmir.
+                      </p>
+                    </>
+                  )}
+
+                  <div>
+                    <Button
+                      variant="outline"
+                      className="mt-2"
+                      onClick={() => setShowFullCoordinatorMessage((prev) => !prev)}
+                    >
+                      {showFullCoordinatorMessage ? "Read Less" : "Read More"}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
           </Card>
         </motion.section>
+
+        {/* Department Overview */}
+        <motion.section
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="py-20"
+        >
+          <SectionHeader 
+            title="Department of"
+            highlightText="Information Technology"
+            description="Central University of Kashmir's Department of Information Technology is a premier institution dedicated to fostering innovation, research excellence, and developing future technology leaders. Our world-class faculty and state-of-the-art facilities provide students with an unparalleled learning experience in the ever-evolving field of Information Technology."
+            maxWidth="max-w-4xl"
+          />
+
+          <DepartmentStats />
+        </motion.section>
+
+
+        
 
         {/* Featured Faculty Section */}
         <motion.section
@@ -269,7 +288,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {[
-              { title: "Study Materials", icon: BookOpen, link: "/study-materials", color: "from-blue-600 to-purple-600" },
+              { title: "Content", icon: BookOpen, link: "/study-materials", color: "from-blue-600 to-purple-600" },
               { title: "Events & Notices", icon: Calendar, link: "/events", color: "from-green-600 to-teal-600" },
               { title: "Gallery", icon: Building, link: "/gallery", color: "from-orange-600 to-red-600" },
               { title: "Contact Us", icon: Globe, link: "/contact", color: "from-indigo-600 to-blue-600" }

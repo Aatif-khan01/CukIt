@@ -383,7 +383,7 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { key: "materials", title: "Study Materials", icon: BookOpen, link: "/study-materials", color: "from-blue-600 to-purple-600" },
+              { key: "materials", title: "Content", icon: BookOpen, link: "/study-materials", color: "from-blue-600 to-purple-600" },
               { key: "events", title: "Events & Notices", icon: Calendar, link: "/events", color: "from-green-600 to-teal-600" },
               { key: "gallery", title: "Gallery", icon: Building, link: "/gallery", color: "from-orange-600 to-red-600" },
               { key: "contact", title: "Contact Us", icon: Globe, link: "/contact", color: "from-indigo-600 to-blue-600" },

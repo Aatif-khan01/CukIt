@@ -1,15 +1,46 @@
 import { motion } from "framer-motion"
+import { useState, useEffect } from "react"
 import { Layout } from "@/components/layout"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Clock, Users, BookOpen, Download, ExternalLink, Loader2 } from "lucide-react"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { Camera, Calendar, Users, Award, Building, Maximize2, Loader2 } from "lucide-react"
 import { Link } from "react-router-dom"
-import { usePrograms } from "@/hooks/usePrograms"
+import { useGallery } from "@/hooks/useGallery"
 
-export default function Programs() {
-  const { programs, loading } = usePrograms()
+const categories = [
+  { id: "all", name: "All", icon: Camera },
+  { id: "Events", name: "Events", icon: Calendar },
+  { id: "Campus", name: "Campus", icon: Building },
+  { id: "Infrastructure", name: "Infrastructure", icon: Building },
+  { id: "Achievements", name: "Achievements", icon: Award }
+]
+
+export default function Gallery() {
+  const [activeCategory, setActiveCategory] = useState("all")
+  const { albums, photos, loading, fetchPhotos } = useGallery()
+
+  // Fetch all photos when component mounts
+  useEffect(() => {
+    fetchPhotos()
+  }, [fetchPhotos])
+
+  const publishedAlbums = albums.filter(album => album.status === 'published')
   
+  // Only show photos from published albums
+  const publishedPhotos = photos.filter(photo => {
+    const album = albums.find(a => a.id === photo.album_id)
+    return album?.status === 'published'
+  })
+  
+  const filteredPhotos = activeCategory === "all" 
+    ? publishedPhotos 
+    : publishedPhotos.filter(photo => {
+        const album = albums.find(a => a.id === photo.album_id)
+        return album?.category === activeCategory
+      })
+
   if (loading) {
     return (
       <Layout>
@@ -21,6 +52,7 @@ export default function Programs() {
       </Layout>
     )
   }
+
   return (
     <Layout>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -28,145 +60,189 @@ export default function Programs() {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <nav className="text-sm text-muted-foreground mb-3" aria-label="Breadcrumb">
             <ol className="inline-flex items-center gap-2">
               <li><Link to="/" className="hover:underline">Home</Link></li>
               <li>/</li>
-              <li aria-current="page" className="text-foreground">Programs</li>
+              <li aria-current="page" className="text-foreground">Gallery</li>
             </ol>
           </nav>
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-            Academic <span className="gradient-text">Programs</span>
+            Photo <span className="gradient-text">Gallery</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Choose from our comprehensive range of IT programs designed to shape future technology leaders
+            Explore moments from our vibrant campus life, events, achievements, and state-of-the-art facilities
           </p>
         </motion.div>
 
-        {/* Programs Grid */}
-        <div className="space-y-12">
-          {programs.map((program, index) => (
+        {/* Category Tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="flex flex-wrap justify-center gap-2 mb-12"
+        >
+          {categories.map((category, index) => {
+            const Icon = category.icon
+            return (
+              <Button
+                key={category.id}
+                variant={activeCategory === category.id ? "default" : "outline"}
+                onClick={() => setActiveCategory(category.id)}
+                className={`flex items-center space-x-2 ${
+                  activeCategory === category.id 
+                    ? "gradient-primary text-white" 
+                    : "glass-card hover:bg-primary/10"
+                }`}
+              >
+                <Icon className="w-4 h-4" />
+                <span>{category.name}</span>
+              </Button>
+            )
+          })}
+        </motion.div>
+
+        {/* Gallery Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredPhotos.map((photo, index) => {
+            const album = albums.find(a => a.id === photo.album_id)
+            return (
             <motion.div
-              key={program.id}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.2 }}
-              className="glass-card rounded-2xl overflow-hidden hover-lift"
+              key={photo.id}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.1 }}
             >
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-0">
-                {/* Program Info */}
-                <div className="lg:col-span-2 p-8 lg:p-12">
-                  <div className="flex items-center gap-3 mb-4">
-                    <Badge variant="outline" className="text-primary border-primary">
-                      {program.title.split(' ')[0]} {program.title.split(' ')[1]}
-                    </Badge>
-                    <div className="flex items-center text-sm text-muted-foreground space-x-4">
-                      <div className="flex items-center space-x-1">
-                        <Clock className="w-4 h-4" />
-                        <span>{program.duration}</span>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Card className="glass-card hover-lift cursor-pointer group overflow-hidden">
+                    <div className="aspect-square relative overflow-hidden">
+                      {photo.image_url ? (
+                        <img 
+                          src={photo.image_url} 
+                          alt={photo.title || 'Gallery image'}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                          <Camera className="w-12 h-12 text-primary/50" />
+                        </div>
+                      )}
+                      
+                      {/* Overlay */}
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <Maximize2 className="w-8 h-8 text-white" />
                       </div>
-                    </div>
-                  </div>
-
-                  <h2 className="text-3xl font-bold mb-4 text-foreground">
-                    {program.title}
-                  </h2>
-
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
-                    {program.description}
-                  </p>
-
-                  {/* Curriculum */}
-                  {program.curriculum && (
-                    <div className="mb-8">
-                      <h4 className="font-semibold mb-3 flex items-center">
-                        <BookOpen className="w-4 h-4 mr-2 text-primary" />
-                        Curriculum Overview
-                      </h4>
-                      <p className="text-sm text-muted-foreground">{program.curriculum}</p>
-                    </div>
-                  )}
-
-                  {/* Outcomes - generic copy if not provided */}
-                  <div className="mb-8">
-                    <h4 className="font-semibold mb-3">Program Outcomes</h4>
-                    <ul className="grid sm:grid-cols-2 gap-2 text-sm text-muted-foreground list-disc list-inside">
-                      <li>Strong foundation in computer science theory and practice</li>
-                      <li>Industry-aligned practical skills and teamwork</li>
-                      <li>Ethics, communication, and lifelong learning mindset</li>
-                      <li>Readiness for higher studies, research, and industry roles</li>
-                    </ul>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-wrap gap-3">
-                    <Button className="gradient-primary text-white">
-                      <Download className="w-4 h-4 mr-2" />
-                      Download Syllabus
-                    </Button>
-                    <Button variant="outline" className="border-primary/20 hover:bg-primary/10" asChild>
-                      <Link to="/contact">
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Admission Details
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Program Details Sidebar */}
-                <div className="bg-gradient-to-br from-primary/10 to-accent/10 p-8 lg:p-12 border-l border-glass-border/50">
-                  <div className="space-y-6">
-                    {program.eligibility && (
-                      <div>
-                        <h4 className="font-semibold text-foreground mb-2">Eligibility</h4>
-                        <p className="text-sm text-muted-foreground">{program.eligibility}</p>
-                      </div>
-                    )}
-
-                    <div>
-                      <h4 className="font-semibold text-foreground mb-2">Duration</h4>
-                      <p className="text-sm text-muted-foreground">{program.duration}</p>
-                    </div>
-
-                    <div className="pt-4 border-t border-glass-border/30">
-                      <Button 
+                      
+                      {/* Category Badge */}
+                      <Badge 
                         variant="outline" 
-                        className="w-full glass-card hover:bg-primary/20"
+                        className="absolute top-2 left-2 bg-background/80 backdrop-blur-sm"
                       >
-                        Apply Now
-                      </Button>
+                        {album?.category || 'Gallery'}
+                      </Badge>
+                    </div>
+                    
+                    <CardContent className="p-4">
+                      <h3 className="font-semibold text-sm line-clamp-2 mb-1">
+                        {photo.title || album?.name || 'Untitled'}
+                      </h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
+                        {photo.description || album?.description || 'No description available'}
+                      </p>
+                      <div className="flex items-center space-x-1 text-xs text-muted-foreground">
+                        <Calendar className="w-3 h-3" />
+                        <span>{new Date(photo.created_at).toLocaleDateString()}</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </DialogTrigger>
+                
+                <DialogContent className="max-w-4xl w-full">
+                  <div className="space-y-4">
+                    {/* Full Image */}
+                    <div className="aspect-video rounded-lg overflow-hidden">
+                      {photo.image_url ? (
+                        <img 
+                          src={photo.image_url} 
+                          alt={photo.title || 'Gallery image'}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                          <Camera className="w-24 h-24 text-primary/50" />
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Image Details */}
+                    <div className="space-y-2">
+                      <div className="flex items-start justify-between">
+                        <h2 className="text-2xl font-bold">{photo.title || album?.name || 'Untitled'}</h2>
+                        <Badge variant="outline">{album?.category || 'Gallery'}</Badge>
+                      </div>
+                      <p className="text-muted-foreground">{photo.description || album?.description || 'No description available'}</p>
+                      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                        <Calendar className="w-4 h-4" />
+                        <span>{new Date(photo.created_at).toLocaleDateString()}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+                </DialogContent>
+              </Dialog>
+            </motion.div>)
+          })}
         </div>
 
-        {/* Call to Action */}
+        {filteredPhotos.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-12"
+          >
+            <Camera className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-xl font-semibold mb-2">No images found</h3>
+            <p className="text-muted-foreground">
+              No images available for the selected category
+            </p>
+          </motion.div>
+        )}
+
+        {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="text-center mt-16"
+          transition={{ delay: 0.6 }}
+          className="mt-16"
         >
-          <div className="glass-card rounded-2xl p-8 lg:p-12 max-w-4xl mx-auto">
-            <h3 className="text-2xl font-bold mb-4 gradient-text">
-              Ready to Start Your IT Journey?
-            </h3>
-            <p className="text-muted-foreground mb-6">
-              Join our community of innovators and shape the future of technology. 
-              Get in touch with our admissions team for guidance.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="gradient-primary text-white">
-                Contact Admissions
-              </Button>
-              <Button size="lg" variant="outline" className="border-primary/20 hover:bg-primary/10">
-                Campus Tour
-              </Button>
+          <div className="glass-card rounded-2xl p-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div className="text-center">
+                <div className="text-3xl font-bold gradient-text mb-2">
+                  {publishedPhotos.length}
+                </div>
+                <div className="text-muted-foreground">Total Photos</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold gradient-text mb-2">
+                  {publishedAlbums.length}
+                </div>
+                <div className="text-muted-foreground">Albums</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold gradient-text mb-2">
+                  {albums.filter(album => album.category === "Events").length}
+                </div>
+                <div className="text-muted-foreground">Event Albums</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold gradient-text mb-2">
+                  {categories.length - 1}
+                </div>
+                <div className="text-muted-foreground">Categories</div>
+              </div>
             </div>
           </div>
         </motion.div>

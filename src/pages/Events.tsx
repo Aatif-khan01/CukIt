@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calendar, MapPin, Clock, Users, ExternalLink, Bell, Loader2 } from "lucide-react"
+import { Link } from "react-router-dom"
 import { useEvents } from "@/hooks/useEvents"
 import { usePublishedNews } from "@/hooks/useNews"
 
@@ -59,6 +60,9 @@ export default function Events() {
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
             Events & <span className="gradient-text">Notices</span>
           </h1>
+          <p className="text-sm text-muted-foreground mt-2">
+            <Link to="/" className="hover:underline">Home</Link> / Events & Notices
+          </p>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Stay updated with the latest events, workshops, conferences, and important notices
           </p>

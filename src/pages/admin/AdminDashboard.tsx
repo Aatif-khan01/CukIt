@@ -43,7 +43,7 @@ export default function AdminDashboard() {
       trend: '+12%'
     },
     {
-      title: 'Study Materials',
+      title: 'Content',
       value: loading ? '...' : stats.materialsCount.toString(),
       description: 'Available resources',
       icon: BookOpen,

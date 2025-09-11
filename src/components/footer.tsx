@@ -15,9 +15,10 @@ const quickLinks = [
   { name: "About Us", href: "/about" },
   { name: "Programs", href: "/programs" },
   { name: "Faculty", href: "/faculty" },
-  { name: "Study Materials", href: "/study-materials" },
+  { name: "Content", href: "/study-materials" },
   { name: "Events", href: "/events" },
-  { name: "Contact", href: "/contact" }
+  { name: "Contact", href: "/contact" },
+  { name: "Admin", href: "/admin" }
 ]
 
 const socialLinks = [

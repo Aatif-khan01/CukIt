@@ -4,7 +4,9 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Clock, Users, BookOpen, Download, ExternalLink, Loader2 } from "lucide-react"
+import { Link } from "react-router-dom"
 import { usePrograms } from "@/hooks/usePrograms"
+import programsHero from "@/assets/programs-hero.jpg"
 
 export default function Programs() {
   const { programs, loading } = usePrograms()
@@ -20,23 +22,40 @@ export default function Programs() {
       </Layout>
     )
   }
+
   return (
     <Layout>
+      {/* Hero Section with Background Image */}
+      <div className="relative h-[40vh] min-h-[350px] overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${programsHero})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
+        <div className="relative h-full flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-white px-4"
+          >
+            <nav className="text-sm text-white/70 mb-3" aria-label="Breadcrumb">
+              <ol className="inline-flex items-center gap-2">
+                <li><Link to="/" className="hover:underline">Home</Link></li>
+                <li>/</li>
+                <li aria-current="page" className="text-white">Programs</li>
+              </ol>
+            </nav>
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
+              Academic <span className="gradient-text">Programs</span>
+            </h1>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              Choose from our comprehensive range of IT programs designed to shape future technology leaders
+            </p>
+          </motion.div>
+        </div>
+      </div>
+      
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-            Academic <span className="gradient-text">Programs</span>
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Choose from our comprehensive range of IT programs designed to shape future technology leaders
-          </p>
-        </motion.div>
-
         {/* Programs Grid */}
         <div className="space-y-12">
           {programs.map((program, index) => (
@@ -81,15 +100,28 @@ export default function Programs() {
                     </div>
                   )}
 
+                  {/* Program Outcomes */}
+                  <div className="mb-8">
+                    <h4 className="font-semibold mb-3">Program Outcomes</h4>
+                    <ul className="grid sm:grid-cols-2 gap-2 text-sm text-muted-foreground list-disc list-inside">
+                      <li>Strong foundation in computer science theory and practice</li>
+                      <li>Industry-aligned practical skills and teamwork</li>
+                      <li>Ethics, communication, and lifelong learning mindset</li>
+                      <li>Readiness for higher studies, research, and industry roles</li>
+                    </ul>
+                  </div>
+
                   {/* Action Buttons */}
                   <div className="flex flex-wrap gap-3">
                     <Button className="gradient-primary text-white">
                       <Download className="w-4 h-4 mr-2" />
                       Download Syllabus
                     </Button>
-                    <Button variant="outline" className="border-primary/20 hover:bg-primary/10">
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Admission Details
+                    <Button variant="outline" className="border-primary/20 hover:bg-primary/10" asChild>
+                      <Link to="/contact">
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Admission Details
+                      </Link>
                     </Button>
                   </div>
                 </div>

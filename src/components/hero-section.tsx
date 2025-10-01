@@ -75,9 +75,9 @@ export function HeroSection() {
             </motion.div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
-              <span className="gradient-text">Empowering Future</span>
+              <span className="gradient-text">Department of Information and technology</span>
               <br />
-              <span className="text-foreground">with Technology</span>
+              <span className="text-foreground">CUK</span>
             </h1>
 
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">

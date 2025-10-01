@@ -9,6 +9,7 @@ import { Calendar, MapPin, Clock, Users, ExternalLink, Bell, Loader2 } from "luc
 import { Link } from "react-router-dom"
 import { useEvents } from "@/hooks/useEvents"
 import { usePublishedNews } from "@/hooks/useNews"
+import eventsHero from "@/assets/events-hero.jpg"
 
 const getStatusColor = (status: string) => {
   switch (status) {
@@ -50,24 +51,33 @@ export default function Events() {
 
   return (
     <Layout>
+      {/* Hero Section with Background Image */}
+      <div className="relative h-[40vh] min-h-[350px] overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${eventsHero})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
+        <div className="relative h-full flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-white px-4"
+          >
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
+              Events & <span className="gradient-text">Notices</span>
+            </h1>
+            <p className="text-sm text-white/70 mt-2">
+              <Link to="/" className="hover:underline">Home</Link> / Events & Notices
+            </p>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              Stay updated with the latest events, workshops, conferences, and important notices
+            </p>
+          </motion.div>
+        </div>
+      </div>
+      
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-            Events & <span className="gradient-text">Notices</span>
-          </h1>
-          <p className="text-sm text-muted-foreground mt-2">
-            <Link to="/" className="hover:underline">Home</Link> / Events & Notices
-          </p>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Stay updated with the latest events, workshops, conferences, and important notices
-          </p>
-        </motion.div>
-
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 glass-card">

@@ -7,7 +7,9 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Download, FileText, BookOpen, GraduationCap, Filter, Loader2 } from "lucide-react"
+import { Link } from "react-router-dom"
 import { useStudyMaterials } from "@/hooks/useStudyMaterials"
+import studyMaterialsHero from "@/assets/study-materials-hero.jpg"
 
 const getTypeIcon = (type: string) => {
   switch (type) {
@@ -58,21 +60,37 @@ export default function StudyMaterials() {
 
   return (
     <Layout>
+      {/* Hero Section with Background Image */}
+      <div className="relative h-[40vh] min-h-[350px] overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${studyMaterialsHero})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
+        <div className="relative h-full flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-white px-4"
+          >
+            <nav className="text-sm text-white/70 mb-3" aria-label="Breadcrumb">
+              <ol className="inline-flex items-center gap-2">
+                <li><Link to="/" className="hover:underline">Home</Link></li>
+                <li>/</li>
+                <li aria-current="page" className="text-white">Content</li>
+              </ol>
+            </nav>
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
+              <span className="gradient-text">Content</span>
+            </h1>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              Access comprehensive study materials, notes, syllabi, and past papers for all CSE courses
+            </p>
+          </motion.div>
+        </div>
+      </div>
+      
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-            <span className="gradient-text">Content</span>
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Access comprehensive study materials, notes, syllabi, and past papers for all CSE courses
-          </p>
-        </motion.div>
-
         {/* Filters */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -134,7 +152,7 @@ export default function StudyMaterials() {
           </div>
         </motion.div>
 
-        {/* Content Grid */}
+        {/* Materials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredMaterials.map((material, index) => (
             <motion.div

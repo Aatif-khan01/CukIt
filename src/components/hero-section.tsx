@@ -1,8 +1,11 @@
 import { motion } from "framer-motion"
-import { ArrowRight, Play } from "lucide-react"
+import { ArrowRight, Play, Users, BookOpen, Trophy, Cpu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
-import heroBackground from "@/assets/hero-background.jpg"
+
+const stats = [
+
+]
 
 export function HeroSection() {
   return (
@@ -11,14 +14,20 @@ export function HeroSection() {
       role="banner"
       aria-label="Hero section"
     >
-      {/* Background */}
+      {/* Background Video */}
       <div className="absolute inset-0">
-        <img 
-          src={heroBackground}
-          alt="Modern technology and computer science background with digital elements"
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline
           className="w-full h-full object-cover"
-          loading="eager"
-        />
+          aria-hidden="true"
+        >
+          <source src="/videos/hero-background.mp4" type="video/mp4" />
+          {/* Fallback for browsers that don't support video */}
+          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/80 to-background/95" />
       </div>
 
@@ -107,6 +116,32 @@ export function HeroSection() {
                 Learn More
               </Link>
             </Button>
+          </motion.div>
+
+          {/* Stats Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+          >
+            {stats.map((stat, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
+                className="text-center"
+              >
+                <div className="glass-card p-6 rounded-2xl hover-lift">
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gradient-primary flex items-center justify-center">
+                    <stat.icon className="w-6 h-6 text-white" aria-hidden="true" />
+                  </div>
+                  <div className="text-2xl font-bold gradient-text mb-1">{stat.value}</div>
+                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                </div>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </div>

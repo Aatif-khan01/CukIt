@@ -21,6 +21,7 @@ import {
   Linkedin,
   Instagram,
 } from "lucide-react";
+import contactHero from "@/assets/contact-hero.jpg";
 
 // Icon type compatible with lucide-react icons
 type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -231,22 +232,31 @@ const Contact: React.FC = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Header */}
-        <motion.div
-          {...fadeInUp(30)}
-          className="text-center mb-16"
-          transition={{ duration: 0.5 }}
-        >
-          <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-            Get in <span className="gradient-text">Touch</span>
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Have questions about our programs, admissions, or research opportunities?
-            We&apos;re here to help take the next step in a technology journey.
-          </p>
-        </motion.div>
+      {/* Hero Section with Background Image */}
+      <div className="relative h-[40vh] min-h-[350px] overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${contactHero})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
+        <div className="relative h-full flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-white px-4"
+          >
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
+              Get in <span className="gradient-text">Touch</span>
+            </h1>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              Have questions about our programs, admissions, or research opportunities?
+              We&apos;re here to help take the next step in a technology journey.
+            </p>
+          </motion.div>
+        </div>
+      </div>
 
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-12">
           {/* Left: Contact Form */}
           <motion.div

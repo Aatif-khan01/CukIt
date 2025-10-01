@@ -16,7 +16,9 @@ import {
   ExternalLink,
   Loader2
 } from "lucide-react"
+import { Link } from "react-router-dom"
 import { useFaculty } from "@/hooks/useFaculty"
+import facultyHero from "@/assets/faculty-hero.jpg"
 
 export default function Faculty() {
   const { faculty: facultyMembers, loading } = useFaculty()
@@ -59,21 +61,37 @@ export default function Faculty() {
 
   return (
     <Layout>
+      {/* Hero Section with Background Image */}
+      <div className="relative h-[40vh] min-h-[350px] overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${facultyHero})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
+        <div className="relative h-full flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-white px-4"
+          >
+            <nav className="text-sm text-white/70 mb-3" aria-label="Breadcrumb">
+              <ol className="inline-flex items-center gap-2">
+                <li><Link to="/" className="hover:underline">Home</Link></li>
+                <li>/</li>
+                <li aria-current="page" className="text-white">Faculty</li>
+              </ol>
+            </nav>
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
+              Our <span className="gradient-text">Faculty</span>
+            </h1>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              Meet our distinguished faculty members who bring decades of experience and expertise to guide your learning journey
+            </p>
+          </motion.div>
+        </div>
+      </div>
+      
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-4xl lg:text-6xl font-bold mb-6">
-            Our <span className="gradient-text">Faculty</span>
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Meet our distinguished faculty members who bring decades of experience and expertise to guide your learning journey
-          </p>
-        </motion.div>
-
         {/* Search and Filters */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -200,7 +218,7 @@ export default function Faculty() {
                     </Button>
                   </div>
 
-                  {/* Full Profile Button */}
+                  {/* Quick Profile Button with Dialog */}
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button

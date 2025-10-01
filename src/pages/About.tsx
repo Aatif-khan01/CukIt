@@ -12,8 +12,8 @@ import {
   Shield,
   Handshake,
   Rocket,
-  type Icon as LucideIcon, // if lucide-react has Icon type; otherwise use React.ComponentType<any>
 } from 'lucide-react';
+import aboutHero from '@/assets/about-hero.jpg';
 
 type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 
@@ -96,7 +96,7 @@ const timeline: TimelineItem[] = [
   { year: '2024', event: 'Cross-disciplinary research collaborations across universities' },
 ];
 
-// Small helpers to keep motion props consistent and readable
+// Motion helpers
 const fadeUp = (y = 30) => ({
   initial: { opacity: 0, y },
   animate: { opacity: 1, y: 0 },
@@ -113,26 +113,32 @@ export default function About() {
 
   return (
     <Layout>
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16" aria-labelledby="about-heading">
-        {/* Page Header */}
-        <motion.header
-          {...fadeUp(30)}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12 sm:mb-16"
-        >
-          <h1 id="about-heading" className="text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">
-            About <span className="gradient-text">Our Department</span>
-          </h1>
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Shaping future innovators through excellence in Information Technology education and research
-          </p>
-        </motion.header>
+      {/* 🔥 Hero Section with background image */}
+      <div className="relative h-[50vh] min-h-[400px] overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${aboutHero})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
+        <div className="relative h-full flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center text-white px-4"
+          >
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
+              About <span className="gradient-text">Our Department</span>
+            </h1>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
+              Shaping future innovators through excellence in Information Technology education and research
+            </p>
+          </motion.div>
+        </div>
+      </div>
 
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         {/* Mission & Vision Cards */}
-        <section aria-labelledby="mission-vision-heading" className="mb-12 sm:mb-16">
-          <h2 id="mission-vision-heading" className="sr-only">
-            Mission, Vision, and Focus
-          </h2>
+        <section className="mb-12 sm:mb-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {highlights.map((item, idx) => {
               const Icon = item.icon;
@@ -144,11 +150,7 @@ export default function About() {
                 >
                   <Card className="glass-card hover-lift h-full">
                     <CardContent className="p-6 text-center">
-                      <Icon
-                        className="w-12 h-12 text-primary mx-auto mb-4"
-                        aria-hidden="true"
-                        focusable="false"
-                      />
+                      <Icon className="w-12 h-12 text-primary mx-auto mb-4" />
                       <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
                       <p className="text-sm text-muted-foreground">{item.description}</p>
                     </CardContent>
@@ -308,13 +310,13 @@ export default function About() {
             <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/70 to-primary/30"></div>
             
             <div className="space-y-8">
-              {timeline.map((item, idx) => (
-                <motion.article
-                  key={`${item.year}-${item.event.slice(0, 12)}`}
-                  {...fadeLeft(30)}
-                  transition={{ delay: idx * (prefersReducedMotion ? 0 : 0.2), duration: 0.4 }}
+            {timeline.map((item, idx) => (
+              <motion.article
+                key={`${item.year}-${item.event.slice(0, 12)}`}
+                {...fadeLeft(30)}
+                transition={{ delay: idx * (prefersReducedMotion ? 0 : 0.2), duration: 0.4 }}
                   className="relative flex items-start gap-6"
-                  aria-label={`Milestone ${idx + 1}: ${item.year}`}
+                aria-label={`Milestone ${idx + 1}: ${item.year}`}
                 >
                   {/* Timeline dot */}
                   <div className="relative z-10 flex-shrink-0">
@@ -329,9 +331,9 @@ export default function About() {
                       <h3 className="text-xl sm:text-2xl font-bold text-primary mb-2">{item.year}</h3>
                       <p className="text-muted-foreground leading-relaxed text-base sm:text-lg">{item.event}</p>
                     </div>
-                  </div>
-                </motion.article>
-              ))}
+                </div>
+              </motion.article>
+            ))}
             </div>
           </div>
         </motion.section>

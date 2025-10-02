@@ -13,12 +13,13 @@ import { FacultyCard } from "@/components/home/faculty-card"
 import { ProgramCard } from "@/components/home/program-card"
 import { QuickAccessCard } from "@/components/home/quick-access-card"
 import { CoordinatorMessage } from "@/components/CoordinatorMessage"
+import { DepartmentInfoSection } from "@/components/home/department-info-section"
 
 import { useFeaturedFaculty } from "@/hooks/useFaculty"
 import { usePrograms } from "@/hooks/usePrograms"
 import { LoadingGrid } from "@/components/loading-spinner"
-import { useEvents } from "@/hooks/useEvents"
-import { usePublishedNews } from "@/hooks/useNews"
+import { useEvents, type Event } from "@/hooks/useEvents"
+import { usePublishedNews, type News } from "@/hooks/useNews"
 
 export default function Home() {
   const [showFullCoordinatorMessage, setShowFullCoordinatorMessage] = useState(false)
@@ -32,8 +33,11 @@ export default function Home() {
       {/* Hero Section */}
       <HeroSection />
 
+      {/* Department Info Section */}
+      <DepartmentInfoSection />
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-24 lg:space-y-32">
-        {/* HOD Message Section */}
+        {/* HOD Message Section with Image */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -131,9 +135,6 @@ export default function Home() {
           <DepartmentStats />
         </motion.section>
 
-
-        
-
         {/* Notices & Updates Section */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
@@ -154,7 +155,7 @@ export default function Home() {
                   <h3 className="text-lg font-semibold">Latest Notices</h3>
                 </div>
                 <div className="space-y-4">
-                  {(newsLoading ? Array.from({ length: 3 }) : news.slice(0,3)).map((item:any, idx:number) => (
+                  {(newsLoading ? Array.from({ length: 3 }) : news.slice(0,3)).map((item: News | null, idx: number) => (
                     <div key={idx} className="flex items-start justify-between gap-4">
                       <div className="flex-1">
                         <p className="text-sm text-foreground/90 line-clamp-2">
@@ -184,7 +185,7 @@ export default function Home() {
                   <h3 className="text-lg font-semibold">Upcoming Events</h3>
                 </div>
                 <div className="space-y-4">
-                  {(eventsLoading ? Array.from({ length: 3 }) : events.slice(0,3)).map((event:any, idx:number) => (
+                  {(eventsLoading ? Array.from({ length: 3 }) : events.slice(0,3)).map((event: Event | null, idx: number) => (
                     <div key={idx} className="flex items-start justify-between gap-4">
                       <div className="flex-1">
                         <p className="text-sm text-foreground/90 line-clamp-2">
@@ -221,7 +222,7 @@ export default function Home() {
             description="Comprehensive programs designed to prepare students for successful careers in Computer Science and Engineering"
           />
 
-            {programsLoading ? (
+          {programsLoading ? (
             <LoadingGrid items={3} className="grid-cols-1 md:grid-cols-2 lg:grid-cols-3" cardClassName="h-96" />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -229,7 +230,7 @@ export default function Home() {
                 <ProgramCard key={program.id} program={program} index={index} />
               ))}
             </div>
-            )}
+          )}
         </motion.section>
 
         {/* Featured Faculty Section */}
@@ -250,7 +251,7 @@ export default function Home() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
                 {featuredFaculty.map((faculty, index) => (
-                <FacultyCard key={faculty.id} faculty={faculty} index={index} />
+                  <FacultyCard key={faculty.id} faculty={faculty} index={index} />
                 ))}
               </div>
             )}
@@ -319,7 +320,6 @@ export default function Home() {
             ))}
           </div>
         </motion.section>
-
 
         {/* Call to Action Section */}
         <motion.section

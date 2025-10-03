@@ -28,7 +28,7 @@ export const useFaculty = () => {
       const { data, error } = await supabase
         .from('faculty')
         .select('*')
-        .order('created_at', { ascending: false })
+        .order('created_at', { ascending: true }) // Changed to true - oldest first, newest last
 
       if (error) throw error
       setFaculty(data || [])
@@ -48,7 +48,8 @@ export const useFaculty = () => {
         .single()
 
       if (error) throw error
-      setFaculty(prev => [data, ...prev])
+      // Add new faculty to the end of the list instead of beginning
+      setFaculty(prev => [...prev, data])
       return { data, error: null }
     } catch (err: any) {
       return { data: null, error: err.message }
@@ -106,7 +107,8 @@ export const useFaculty = () => {
             setFaculty(prev => {
               const exists = prev.find(f => f.id === payload.new.id)
               if (!exists) {
-                return [payload.new as Faculty, ...prev]
+                // Add new faculty to the end instead of beginning
+                return [...prev, payload.new as Faculty]
               }
               return prev
             })
@@ -147,7 +149,7 @@ export const useFeaturedFaculty = () => {
           .from('faculty')
           .select('*')
           .eq('is_featured', true)
-          .order('created_at', { ascending: false })
+          .order('created_at', { ascending: true }) // Changed to true for consistency
 
         if (error) throw error
         setFaculty(data || [])

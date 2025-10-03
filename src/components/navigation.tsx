@@ -129,16 +129,16 @@ export function Navigation() {
             ))}
           </div>
 
-          {/* Mobile Menu Button - Fixed positioning and styling */}
-          <div className="lg:hidden">
+          {/* Mobile Menu Button - FIXED VERSION */}
+          <div className="flex items-center lg:hidden">
             <Button
               variant="ghost"
               size="icon"
               className={cn(
-                "relative w-10 h-10 p-2 rounded-lg transition-all duration-200",
-                "hover:bg-primary/10 focus:ring-2 focus:ring-primary/20",
-                "border border-transparent hover:border-primary/20",
-                isOpen && "bg-primary/10 border-primary/20"
+                "w-12 h-12 flex items-center justify-center rounded-lg transition-all duration-200",
+                "text-white hover:bg-white/10 focus:ring-2 focus:ring-white/20",
+                "border border-transparent hover:border-white/20",
+                isOpen && "bg-white/10 border-white/20"
               )}
               onClick={() => setIsOpen(!isOpen)}
               aria-expanded={isOpen}
@@ -153,7 +153,7 @@ export function Navigation() {
                     exit={{ rotate: 90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <X className="h-5 w-5 text-foreground" />
+                    <X className="h-7 w-7 text-white" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -163,7 +163,7 @@ export function Navigation() {
                     exit={{ rotate: -90, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Menu className="h-5 w-5 text-foreground" />
+                    <Menu className="h-7 w-7 text-white" />
                   </motion.div>
                 )}
               </AnimatePresence>

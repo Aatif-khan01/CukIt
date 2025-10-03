@@ -40,9 +40,6 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
-  
-  // Check if we're on the home page
-  const isHomePage = location.pathname === "/"
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50)
@@ -50,7 +47,7 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Close mobile menu when route changes
+  // Always close the mobile menu when route changes
   useEffect(() => {
     setIsOpen(false)
   }, [location.pathname])
@@ -58,10 +55,12 @@ export function Navigation() {
   return (
     <motion.header 
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled || isOpen || !isHomePage // Always show background if not on home page
-          ? "glass-card backdrop-blur-xl border-b border-glass-border/50"
-          : "bg-transparent"
+        "fixed top-0 left-0 right-0 z-[100] w-full", // very high z-index
+        "backdrop-blur-md border-b border-glass-border/30 transition-all duration-300",
+        // background: always slightly solid, more opaque when scrolled or menu open
+        isOpen || scrolled
+          ? "bg-[rgba(20,20,28,0.97)]"
+          : "bg-[rgba(20,20,28,0.90)]"
       )}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -107,7 +106,6 @@ export function Navigation() {
                   <span>{item.name}</span>
                   {item.submenu && <ChevronDown className="w-3 h-3" />}
                 </Link>
-
                 {/* Submenu */}
                 {item.submenu && (
                   <div className="absolute top-full left-0 mt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
@@ -132,20 +130,12 @@ export function Navigation() {
             ))}
           </div>
 
-          {/* Mobile Menu Button - HOME PAGE SPECIFIC FIX */}
+          {/* Mobile Menu Button */}
           <div className="flex items-center lg:hidden">
             <Button
               variant="ghost"
               size="icon"
-              className={cn(
-                "w-12 h-12 flex items-center justify-center rounded-lg transition-all duration-200",
-                "relative z-10", // Ensure it's above other content
-                // Different styling based on home page and scroll state
-                isHomePage && !scrolled && !isOpen
-                  ? "bg-black/30 backdrop-blur-sm border border-white/30 text-white hover:bg-black/40 hover:border-white/40"
-                  : "text-white hover:bg-white/10 focus:ring-2 focus:ring-white/20 border border-transparent hover:border-white/20",
-                isOpen && "bg-white/10 border-white/20"
-              )}
+              className="w-12 h-12 flex items-center justify-center rounded-lg bg-black/60 text-white border border-white/30 z-[101]"
               onClick={() => setIsOpen(!isOpen)}
               aria-expanded={isOpen}
               aria-label={isOpen ? "Close menu" : "Open menu"}
@@ -185,7 +175,7 @@ export function Navigation() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="lg:hidden border-t border-glass-border/50 backdrop-blur-xl bg-background/95"
+              className="lg:hidden border-t border-glass-border/50 backdrop-blur-xl bg-[rgba(10,12,18,0.97)] z-[99]"
             >
               <div className="py-4 space-y-1 max-h-[calc(100vh-5rem)] overflow-y-auto">
                 {navigationItems.map((item, index) => (
@@ -205,16 +195,15 @@ export function Navigation() {
                       onClick={() => setIsOpen(false)}
                       className={cn(
                         "flex items-center space-x-3 px-4 py-3 mx-2 rounded-lg transition-all duration-200",
-                        "hover:scale-[1.02] active:scale-[0.98]",
+                        "min-h-[48px] hover:scale-[1.02] active:scale-[0.98]",
                         location.pathname === item.href
                           ? "bg-primary/10 text-primary border border-primary/20 shadow-sm"
-                          : "text-foreground/90 hover:text-foreground hover:bg-glass/50 hover:border-glass-border/30 border border-transparent"
+                          : "text-white hover:text-white/90 hover:bg-white/5 hover:border-white/20 border border-transparent"
                       )}
                     >
                       <item.icon className="w-5 h-5 shrink-0" />
                       <span className="font-medium">{item.name}</span>
                     </Link>
-
                     {/* Mobile submenu items */}
                     {item.submenu && (
                       <div className="ml-4 mt-1 space-y-1">
@@ -225,9 +214,10 @@ export function Navigation() {
                             onClick={() => setIsOpen(false)}
                             className={cn(
                               "flex items-center space-x-3 px-4 py-2 mx-2 rounded-lg transition-all duration-200 text-sm",
+                              "min-h-[40px]",
                               location.pathname === subitem.href
-                                ? "bg-primary/5 text-primary"
-                                : "text-foreground/70 hover:text-foreground hover:bg-glass/30"
+                                ? "bg-primary/10 text-primary"
+                                : "text-white/70 hover:text-white hover:bg-white/10"
                             )}
                           >
                             <div className="w-1 h-1 bg-current rounded-full shrink-0" />

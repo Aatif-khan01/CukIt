@@ -17,7 +17,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-
 const navigationItems = [
   { name: "Home", href: "/", icon: Home },
   { name: "About", href: "/about", icon: Info },
@@ -35,15 +34,12 @@ const navigationItems = [
   },
   { name: "Gallery", href: "/gallery", icon: Camera },
   { name: "Contact", href: "/contact", icon: Phone },
-  
 ]
-
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
-
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50)
@@ -51,6 +47,10 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsOpen(false)
+  }, [location.pathname])
 
   return (
     <motion.header 
@@ -81,7 +81,6 @@ export function Navigation() {
             </div>
           </motion.div>
 
-
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-1 ml-auto">
             {navigationItems.map((item, index) => (
@@ -105,7 +104,6 @@ export function Navigation() {
                   <span>{item.name}</span>
                   {item.submenu && <ChevronDown className="w-3 h-3" />}
                 </Link>
-
 
                 {/* Submenu */}
                 {item.submenu && (
@@ -131,61 +129,107 @@ export function Navigation() {
             ))}
           </div>
 
-
-          {/* Mobile Menu Button (keeps spacing from removed theme toggle) */}
-          <div className="flex items-center space-x-2">
-            {/* Spacer to keep layout same size where theme toggle was */}
-            <div className="w-9 h-9" />
-
-
+          {/* Mobile Menu Button - Fixed positioning and styling */}
+          <div className="lg:hidden">
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden w-9 h-9"
+              className={cn(
+                "relative w-10 h-10 p-2 rounded-lg transition-all duration-200",
+                "hover:bg-primary/10 focus:ring-2 focus:ring-primary/20",
+                "border border-transparent hover:border-primary/20",
+                isOpen && "bg-primary/10 border-primary/20"
+              )}
               onClick={() => setIsOpen(!isOpen)}
               aria-expanded={isOpen}
               aria-label={isOpen ? "Close menu" : "Open menu"}
             >
-              {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              <AnimatePresence mode="wait">
+                {isOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="h-5 w-5 text-foreground" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="h-5 w-5 text-foreground" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </Button>
           </div>
         </div>
 
-
-        {/* Mobile Navigation - FIXED SECTION */}
+        {/* Mobile Navigation */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className={cn(
-                "lg:hidden border-t border-glass-border/50 backdrop-blur-xl rounded-b-xl shadow-lg",
-                // Match the header's background style
-                "bg-background/40 supports-[backdrop-filter]:bg-background/20"
-              )}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="lg:hidden border-t border-glass-border/50 backdrop-blur-xl"
             >
-              <div className="py-4 space-y-2">
+              <div className="py-4 space-y-1 max-h-[calc(100vh-5rem)] overflow-y-auto">
                 {navigationItems.map((item, index) => (
                   <motion.div
                     key={item.name}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ 
+                      delay: index * 0.05, 
+                      duration: 0.2,
+                      ease: "easeOut" 
+                    }}
                   >
                     <Link
                       to={item.href}
                       onClick={() => setIsOpen(false)}
                       className={cn(
-                        "flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors",
+                        "flex items-center space-x-3 px-4 py-3 mx-2 rounded-lg transition-all duration-200",
+                        "hover:scale-[1.02] active:scale-[0.98]",
                         location.pathname === item.href
-                          ? "bg-primary/10 text-primary border border-primary/20"
-                          : "text-foreground/90 hover:text-foreground hover:bg-glass/50"
+                          ? "bg-primary/10 text-primary border border-primary/20 shadow-sm"
+                          : "text-foreground/90 hover:text-foreground hover:bg-glass/50 hover:border-glass-border/30 border border-transparent"
                       )}
                     >
-                      <item.icon className="w-5 h-5" />
+                      <item.icon className="w-5 h-5 shrink-0" />
                       <span className="font-medium">{item.name}</span>
                     </Link>
+
+                    {/* Mobile submenu items */}
+                    {item.submenu && (
+                      <div className="ml-4 mt-1 space-y-1">
+                        {item.submenu.map((subitem) => (
+                          <Link
+                            key={subitem.name}
+                            to={subitem.href}
+                            onClick={() => setIsOpen(false)}
+                            className={cn(
+                              "flex items-center space-x-3 px-4 py-2 mx-2 rounded-lg transition-all duration-200 text-sm",
+                              location.pathname === subitem.href
+                                ? "bg-primary/5 text-primary"
+                                : "text-foreground/70 hover:text-foreground hover:bg-glass/30"
+                            )}
+                          >
+                            <div className="w-1 h-1 bg-current rounded-full shrink-0" />
+                            <span>{subitem.name}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </motion.div>
                 ))}
               </div>

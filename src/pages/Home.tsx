@@ -21,6 +21,9 @@ import { LoadingGrid } from "@/components/loading-spinner"
 import { useEvents, type Event } from "@/hooks/useEvents"
 import { usePublishedNews, type News } from "@/hooks/useNews"
 
+// Import the background image from src/assets
+import campusImage from "@/assets/campus.jpg"
+
 export default function Home() {
   const [showFullCoordinatorMessage, setShowFullCoordinatorMessage] = useState(false)
   const { faculty: featuredFaculty, loading: facultyLoading } = useFeaturedFaculty()
@@ -36,7 +39,7 @@ export default function Home() {
       {/* Department Info Section */}
       <DepartmentInfoSection />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-24 lg:space-y-32">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-20 lg:space-y-24">
         {/* HOD Message Section with Image */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
@@ -74,7 +77,7 @@ export default function Home() {
                     Message from Coordinator & HOD
                   </h3>
                   <p className="text-primary font-medium">
-                    Dr. Yash Paul — Coordinator & Head of Department
+                    Dr. Yash Paul, Coordinator & Head of Department
                   </p>
                 </header>
 
@@ -118,12 +121,67 @@ export default function Home() {
           </Card>
         </motion.section>
 
-        {/* Department Overview */}
+        {/* Mission & Vision Section - Reduced spacing */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="py-20"
+          className="-mt-8 sm:-mt-12 lg:-mt-16"
+        >
+          <SectionHeader 
+            title="Our Mission &"
+            highlightText="Vision"
+            description="Guiding principles that drive our commitment to excellence in IT education"
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                icon: Target,
+                title: "Our Mission",
+                description: "To provide world-class education in Information Technology and foster innovation through cutting-edge research and industry collaboration."
+              },
+              {
+                icon: Eye,
+                title: "Our Vision", 
+                description: "To be a leading IT department recognized globally for excellence in education, research, and technological advancement."
+              },
+              {
+                icon: Users,
+                title: "Student Focus",
+                description: "Empowering students with practical skills, theoretical knowledge, and entrepreneurial mindset to excel in the digital age."
+              },
+              {
+                icon: Award,
+                title: "Excellence",
+                description: "Committed to academic excellence, research innovation, and producing industry-ready IT professionals."
+              }
+            ].map((item, index) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Card className="glass-card hover-lift h-full">
+                  <CardContent className="p-6 text-center">
+                    <item.icon className="w-12 h-12 text-primary mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
+                    <p className="text-sm text-muted-foreground">{item.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Department Overview - Reduced spacing */}
+        <motion.section
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="py-12 -mt-8 sm:-mt-12 lg:-mt-16"
         >
           <SectionHeader 
             title="Department of"
@@ -159,9 +217,9 @@ export default function Home() {
                     <div key={idx} className="flex items-start justify-between gap-4">
                       <div className="flex-1">
                         <p className="text-sm text-foreground/90 line-clamp-2">
-                          {newsLoading ? 'Loading…' : item.title}
+                          {newsLoading ? 'Loading…' : item?.title}
                         </p>
-                        {!newsLoading && (
+                        {!newsLoading && item && (
                           <p className="text-xs text-muted-foreground mt-1">
                             {item.publish_date ? new Date(item.publish_date).toLocaleDateString() : new Date(item.created_at).toLocaleDateString()}
                           </p>
@@ -189,9 +247,9 @@ export default function Home() {
                     <div key={idx} className="flex items-start justify-between gap-4">
                       <div className="flex-1">
                         <p className="text-sm text-foreground/90 line-clamp-2">
-                          {eventsLoading ? 'Loading…' : event.title}
+                          {eventsLoading ? 'Loading…' : event?.title}
                         </p>
-                        {!eventsLoading && (
+                        {!eventsLoading && event && (
                           <p className="text-xs text-muted-foreground mt-1">
                             {new Date(event.date_time).toLocaleDateString()} • {event.venue}
                           </p>
@@ -267,88 +325,48 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Mission & Vision Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <SectionHeader 
-            title="Our Mission &"
-            highlightText="Vision"
-            description="Guiding principles that drive our commitment to excellence in IT education"
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: Target,
-                title: "Our Mission",
-                description: "To provide world-class education in Information Technology and foster innovation through cutting-edge research and industry collaboration."
-              },
-              {
-                icon: Eye,
-                title: "Our Vision", 
-                description: "To be a leading IT department recognized globally for excellence in education, research, and technological advancement."
-              },
-              {
-                icon: Users,
-                title: "Student Focus",
-                description: "Empowering students with practical skills, theoretical knowledge, and entrepreneurial mindset to excel in the digital age."
-              },
-              {
-                icon: Award,
-                title: "Excellence",
-                description: "Committed to academic excellence, research innovation, and producing industry-ready IT professionals."
-              }
-            ].map((item, index) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="glass-card hover-lift h-full">
-                  <CardContent className="p-6 text-center">
-                    <item.icon className="w-12 h-12 text-primary mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
-                    <p className="text-sm text-muted-foreground">{item.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </motion.section>
-
-        {/* Call to Action Section */}
+        {/* Call to Action Section with Background Image */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center"
         >
-          <div className="glass-card rounded-2xl p-8 sm:p-12 lg:p-16">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              Ready to Start Your
-              <span className="gradient-text block">IT Journey?</span>
-            </h2>
-            <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-              Join our vibrant community of learners and innovators. Explore our programs, 
-              connect with our faculty, and discover endless opportunities in Information Technology.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="gradient-primary text-white hover:shadow-glow" asChild>
-                <Link to="/programs">
-                  Explore Programs
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="glass-card hover:bg-primary/10" asChild>
-                <Link to="/contact">
-                  Get in Touch
-                </Link>
-              </Button>
+          <div 
+            className="glass-card rounded-2xl p-8 sm:p-12 lg:p-16 relative overflow-hidden"
+            style={{
+              backgroundImage: `url(${campusImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          >
+            {/* Dark overlay for better text readability */}
+            <div className="absolute inset-0 bg-black/60 rounded-2xl"></div>
+            
+            {/* Content with relative positioning to appear above overlay */}
+            <div className="relative z-10">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-white">
+                Ready to Start Your
+                <span className="gradient-text block">IT Journey?</span>
+              </h2>
+              <p className="text-lg sm:text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+                Join our vibrant community of learners and innovators. Explore our programs, 
+                connect with our faculty, and discover endless opportunities in Information Technology.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button size="lg" className="gradient-primary text-white hover:shadow-glow" asChild>
+                  <Link to="/programs">
+                    Explore Programs
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" className="glass-card hover:bg-primary/10 text-white border-white/30" asChild>
+                  <Link to="/contact">
+                    Get in Touch
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </motion.section>

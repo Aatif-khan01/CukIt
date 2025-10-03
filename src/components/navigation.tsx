@@ -40,6 +40,9 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
+  
+  // Check if we're on the home page
+  const isHomePage = location.pathname === "/"
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50)
@@ -56,7 +59,7 @@ export function Navigation() {
     <motion.header 
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        scrolled || isOpen
+        scrolled || isOpen || !isHomePage // Always show background if not on home page
           ? "glass-card backdrop-blur-xl border-b border-glass-border/50"
           : "bg-transparent"
       )}
@@ -129,15 +132,18 @@ export function Navigation() {
             ))}
           </div>
 
-          {/* Mobile Menu Button - FIXED VERSION */}
+          {/* Mobile Menu Button - HOME PAGE SPECIFIC FIX */}
           <div className="flex items-center lg:hidden">
             <Button
               variant="ghost"
               size="icon"
               className={cn(
                 "w-12 h-12 flex items-center justify-center rounded-lg transition-all duration-200",
-                "text-white hover:bg-white/10 focus:ring-2 focus:ring-white/20",
-                "border border-transparent hover:border-white/20",
+                "relative z-10", // Ensure it's above other content
+                // Different styling based on home page and scroll state
+                isHomePage && !scrolled && !isOpen
+                  ? "bg-black/30 backdrop-blur-sm border border-white/30 text-white hover:bg-black/40 hover:border-white/40"
+                  : "text-white hover:bg-white/10 focus:ring-2 focus:ring-white/20 border border-transparent hover:border-white/20",
                 isOpen && "bg-white/10 border-white/20"
               )}
               onClick={() => setIsOpen(!isOpen)}
@@ -179,7 +185,7 @@ export function Navigation() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="lg:hidden border-t border-glass-border/50 backdrop-blur-xl"
+              className="lg:hidden border-t border-glass-border/50 backdrop-blur-xl bg-background/95"
             >
               <div className="py-4 space-y-1 max-h-[calc(100vh-5rem)] overflow-y-auto">
                 {navigationItems.map((item, index) => (

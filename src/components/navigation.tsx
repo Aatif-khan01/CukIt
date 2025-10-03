@@ -53,7 +53,7 @@ export function Navigation() {
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         scrolled || isOpen
           ? "glass-card backdrop-blur-xl border-b border-glass-border/50"
-          : "bg-transparent"
+          : "bg-background/20"   // ✅ FIX: no more fully transparent start
       )}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -72,7 +72,9 @@ export function Navigation() {
             </div>
             <div className="hidden sm:block">
               <h1 className="text-lg font-bold text-foreground">CUK IT</h1>
-              <p className="text-xs text-muted-foreground">Department of Information Technology</p>
+              <p className="text-xs text-muted-foreground">
+                Department of Information Technology
+              </p>
             </div>
           </motion.div>
 
@@ -128,7 +130,7 @@ export function Navigation() {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden w-9 h-9 ml-2"
+            className="lg:hidden w-9 h-9 ml-2 relative z-50 text-foreground"
             onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
             aria-label={isOpen ? "Close menu" : "Open menu"}

@@ -30,21 +30,21 @@ export default function Home() {
   const { programs, loading: programsLoading } = usePrograms()
   const { events, loading: eventsLoading } = useEvents()
   const { news, loading: newsLoading } = usePublishedNews()
-  
+
   return (
     <Layout>
-      {/* Hero Section - FIXED Z-INDEX */}
-      <div className="relative z-10">
+      {/* Hero Section with z-index to prevent overlap */}
+      <div className="relative z-[1]">
         <HeroSection />
       </div>
 
-      {/* Department Info Section - FIXED Z-INDEX */}
-      <div className="relative z-10">
+      {/* Department Info Section */}
+      <div className="relative z-[1]">
         <DepartmentInfoSection />
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-20 lg:space-y-24 relative z-10">
-        {/* HOD Message Section with Image */}
+        {/* HOD Message Section */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -58,7 +58,6 @@ export default function Home() {
 
           <Card className="glass-card rounded-2xl p-6 sm:p-8 lg:p-12">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-              {/* Image side */}
               <div className="lg:col-span-1">
                 <div className="w-48 h-48 sm:w-64 sm:h-64 lg:w-72 lg:h-72 mx-auto rounded-3xl p-[6px] bg-gradient-to-br from-primary to-purple-500">
                   <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg ring-1 ring-white/10">
@@ -74,7 +73,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Text side */}
               <div className="lg:col-span-2 space-y-6">
                 <header>
                   <h3 className="text-2xl sm:text-3xl font-bold mb-2 gradient-text">
@@ -125,7 +123,7 @@ export default function Home() {
           </Card>
         </motion.section>
 
-        {/* Mission & Vision Section - Reduced spacing */}
+        {/* Mission & Vision Section */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -180,7 +178,7 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Department Overview - Reduced spacing */}
+        {/* Department Overview */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -329,7 +327,7 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Call to Action Section with Background Image */}
+        {/* Call to Action Section */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}

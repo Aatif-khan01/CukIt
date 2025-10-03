@@ -47,20 +47,13 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Always close the mobile menu when route changes
-  useEffect(() => {
-    setIsOpen(false)
-  }, [location.pathname])
-
   return (
     <motion.header 
       className={cn(
-        "fixed top-0 left-0 right-0 z-[100] w-full", // very high z-index
-        "backdrop-blur-md border-b border-glass-border/30 transition-all duration-300",
-        // background: always slightly solid, more opaque when scrolled or menu open
-        isOpen || scrolled
-          ? "bg-[rgba(20,20,28,0.97)]"
-          : "bg-[rgba(20,20,28,0.90)]"
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        scrolled || isOpen
+          ? "glass-card backdrop-blur-xl border-b border-glass-border/50"
+          : "bg-transparent"
       )}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -106,6 +99,7 @@ export function Navigation() {
                   <span>{item.name}</span>
                   {item.submenu && <ChevronDown className="w-3 h-3" />}
                 </Link>
+
                 {/* Submenu */}
                 {item.submenu && (
                   <div className="absolute top-full left-0 mt-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
@@ -131,40 +125,16 @@ export function Navigation() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center lg:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="w-12 h-12 flex items-center justify-center rounded-lg bg-black/60 text-white border border-white/30 z-[101]"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-expanded={isOpen}
-              aria-label={isOpen ? "Close menu" : "Open menu"}
-            >
-              <AnimatePresence mode="wait">
-                {isOpen ? (
-                  <motion.div
-                    key="close"
-                    initial={{ rotate: -90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: 90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <X className="h-7 w-7 text-white" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="menu"
-                    initial={{ rotate: 90, opacity: 0 }}
-                    animate={{ rotate: 0, opacity: 1 }}
-                    exit={{ rotate: -90, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Menu className="h-7 w-7 text-white" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </Button>
-          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden w-9 h-9 ml-2"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-expanded={isOpen}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+          >
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
         </div>
 
         {/* Mobile Navigation */}
@@ -174,58 +144,32 @@ export function Navigation() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="lg:hidden border-t border-glass-border/50 backdrop-blur-xl bg-[rgba(10,12,18,0.97)] z-[99]"
+              className={cn(
+                "lg:hidden border-t border-glass-border/50 backdrop-blur-xl rounded-b-xl shadow-lg",
+                "bg-background/40 supports-[backdrop-filter]:bg-background/20"
+              )}
             >
-              <div className="py-4 space-y-1 max-h-[calc(100vh-5rem)] overflow-y-auto">
+              <div className="py-4 space-y-2">
                 {navigationItems.map((item, index) => (
                   <motion.div
                     key={item.name}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ 
-                      delay: index * 0.05, 
-                      duration: 0.2,
-                      ease: "easeOut" 
-                    }}
+                    transition={{ delay: index * 0.1 }}
                   >
                     <Link
                       to={item.href}
                       onClick={() => setIsOpen(false)}
                       className={cn(
-                        "flex items-center space-x-3 px-4 py-3 mx-2 rounded-lg transition-all duration-200",
-                        "min-h-[48px] hover:scale-[1.02] active:scale-[0.98]",
+                        "flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors",
                         location.pathname === item.href
-                          ? "bg-primary/10 text-primary border border-primary/20 shadow-sm"
-                          : "text-white hover:text-white/90 hover:bg-white/5 hover:border-white/20 border border-transparent"
+                          ? "bg-primary/10 text-primary border border-primary/20"
+                          : "text-foreground/90 hover:text-foreground hover:bg-glass/50"
                       )}
                     >
-                      <item.icon className="w-5 h-5 shrink-0" />
+                      <item.icon className="w-5 h-5" />
                       <span className="font-medium">{item.name}</span>
                     </Link>
-                    {/* Mobile submenu items */}
-                    {item.submenu && (
-                      <div className="ml-4 mt-1 space-y-1">
-                        {item.submenu.map((subitem) => (
-                          <Link
-                            key={subitem.name}
-                            to={subitem.href}
-                            onClick={() => setIsOpen(false)}
-                            className={cn(
-                              "flex items-center space-x-3 px-4 py-2 mx-2 rounded-lg transition-all duration-200 text-sm",
-                              "min-h-[40px]",
-                              location.pathname === subitem.href
-                                ? "bg-primary/10 text-primary"
-                                : "text-white/70 hover:text-white hover:bg-white/10"
-                            )}
-                          >
-                            <div className="w-1 h-1 bg-current rounded-full shrink-0" />
-                            <span>{subitem.name}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    )}
                   </motion.div>
                 ))}
               </div>

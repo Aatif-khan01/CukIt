@@ -33,13 +33,17 @@ export default function Home() {
   
   return (
     <Layout>
-      {/* Hero Section */}
-      <HeroSection />
+      {/* Hero Section - FIXED Z-INDEX */}
+      <div className="relative z-10">
+        <HeroSection />
+      </div>
 
-      {/* Department Info Section */}
-      <DepartmentInfoSection />
+      {/* Department Info Section - FIXED Z-INDEX */}
+      <div className="relative z-10">
+        <DepartmentInfoSection />
+      </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-20 lg:space-y-24">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-20 lg:space-y-24 relative z-10">
         {/* HOD Message Section with Image */}
         <motion.section
           initial={{ opacity: 0, y: 50 }}
@@ -77,7 +81,7 @@ export default function Home() {
                     Message from Coordinator & HOD
                   </h3>
                   <p className="text-primary font-medium">
-                    Dr. Yash Paul, Coordinator & Head of Department
+                    Dr. Yash Paul — Coordinator & Head of Department
                   </p>
                 </header>
 

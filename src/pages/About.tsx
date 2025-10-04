@@ -8,14 +8,12 @@ import {
   Eye,
   Users,
   Award,
+  Lightbulb,
+  Shield,
+  Handshake,
+  Rocket,
 } from 'lucide-react';
 import aboutHero from '@/assets/about-hero.jpg';
-
-// Import PNG images
-import CollaborationImg from '@/assets/Collabiration.png';
-import InnovationImg from '@/assets/Innovation.png';
-import IntegrityImg from '@/assets/Integrity.png';
-import GrowthImg from '@/assets/Growth.png';
 
 type IconType = React.ComponentType<React.SVGProps<SVGSVGElement>>;
 
@@ -26,7 +24,7 @@ type Highlight = {
 };
 
 type CoreValue = {
-  image: string;
+  icon: IconType;
   title: string;
   description: string;
 };
@@ -65,25 +63,25 @@ const highlights: Highlight[] = [
 
 const coreValues: CoreValue[] = [
   {
-    image: InnovationImg,
+    icon: Lightbulb,
     title: 'Innovation',
     description:
       'Encouraging creativity and embracing emerging technologies to solve real-world problems.',
   },
   {
-    image: IntegrityImg,
+    icon: Shield,
     title: 'Integrity',
     description:
       'Upholding strong ethical values in education, research, and professional practices.',
   },
   {
-    image: CollaborationImg,
+    icon: Handshake,
     title: 'Collaboration',
     description:
       'Building strong partnerships with industry, academia, and the community.',
   },
   {
-    image: GrowthImg,
+    icon: Rocket,
     title: 'Growth',
     description:
       'Fostering continuous learning and professional development among students and faculty.',
@@ -115,7 +113,7 @@ export default function About() {
 
   return (
     <Layout>
-      {/* Hero Section */}
+      {/* 🔥 Hero Section with background image */}
       <div className="relative h-[50vh] min-h-[400px] overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -147,6 +145,7 @@ export default function About() {
           transition={{ delay: prefersReducedMotion ? 0 : 0.6, duration: 0.5 }}
         >
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+            {/* Image side */}
             <div className="lg:col-span-1">
               <div className="w-48 h-48 sm:w-64 sm:h-64 lg:w-72 lg:h-72 mx-auto rounded-3xl p-[6px] bg-gradient-to-br from-primary to-purple-500">
                 <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg ring-1 ring-white/10">
@@ -161,6 +160,8 @@ export default function About() {
                 </div>
               </div>
             </div>
+
+            {/* Text side */}
             <div className="lg:col-span-2 space-y-6">
               <header>
                 <h2 id="hod-heading" className="text-2xl sm:text-3xl font-bold mb-2 gradient-text">
@@ -170,8 +171,26 @@ export default function About() {
                   Dr. Yash Paul, Coordinator & Head of Department
                 </p>
               </header>
+
               <div className="space-y-4 text-muted-foreground leading-relaxed">
-                <p>It is with great excitement and pride that I welcome you to the Department of Information Technology at the Central University of Kashmir...</p>
+                <p>
+                  It is with great excitement and pride that I welcome you to the Department of Information Technology at the Central University of Kashmir. This marks a significant milestone in our collective journey, symbolizing a new chapter in our department's story one dedicated to capturing the essence of our academic pursuits, our groundbreaking achievements, and the vibrant spirit of collaboration that defines us.
+                </p>
+                <p>
+                  The realm of Information Technology is not merely evolving; it is accelerating at a breathtaking pace, continuously redefining the limits of what is possible. From the intricate algorithms of artificial intelligence and machine learning that anticipate our needs, to the robust frameworks of cybersecurity that safeguard our digital lives, and the distributed architectures of blockchain and cloud computing that power modern enterprises these are not just subjects we teach, but the very fabric of the future we are helping to shape.
+                </p>
+                <p>
+                  In this dynamic and demanding landscape, our mission is clear: to provide an education that is both deeply foundational and fiercely contemporary, ensuring our graduates are not just participants but architects of the global tech ecosystem. At the Department of Information Technology, we have consciously built a learning environment alive with possibility. Our programs, designed in line with the guiding principles of the National Education Policy (NEP) 2020, promote a holistic, flexible, and experiential model of education.
+                </p>
+                <p>
+                  We believe true learning happens at the intersection of theory and practice. That is why our pedagogy is enriched with industry-driven projects, cutting-edge research opportunities with faculty, internships at leading tech firms, and a vibrant calendar of competitive events such as coding marathons and cybersecurity capture-the-flag exercises. These experiences are indispensable, transforming abstract knowledge into tangible skill and fostering essential qualities such as leadership, teamwork, and resilient problem-solving.
+                </p>
+                <p>
+                  None of this would be possible without the collective effort of our incredible community. I extend my sincerest appreciation to our faculty members, whose mentorship extends far beyond the classroom and whose research endeavours set a powerful example. To our students, your curiosity and drive to excel are the true inspiration behind our progress.
+                </p>
+                <p>
+                  As we continue to grow, I invite each one of you to actively contribute to our shared journey through your projects, research, innovations, and perspectives on emerging technologies. Together, let us build a dynamic academic and professional space that reflects our highest aspirations, amplifies our successes, and captures the limitless potential we hold as the IT community of Central University of Kashmir.
+                </p>
               </div>
             </div>
           </div>
@@ -201,35 +220,39 @@ export default function About() {
           </div>
         </section>
 
-        {/* Core Values Section - Open Style (no boxes) */}
+        {/* Core Values Section */}
         <motion.section
           aria-labelledby="values-heading"
           className="mb-12 sm:mb-16"
           {...fadeUp(40)}
           transition={{ delay: prefersReducedMotion ? 0 : 0.7, duration: 0.5 }}
         >
-          <h2 id="values-heading" className="text-2xl sm:text-3xl font-bold text-center mb-12 sm:mb-16">
+          <h2 id="values-heading" className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-10">
             Our Core Values
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 text-center">
-            {coreValues.map((value, idx) => (
-              <motion.div
-                key={value.title}
-                {...fadeUp(30)}
-                transition={{ delay: idx * baseDelay, duration: 0.4 }}
-                className="flex flex-col items-center px-6"
-              >
-                <img
-                  src={value.image}
-                  alt={value.title}
-                  className="w-20 h-20 mb-6 rounded-xl object-cover shadow-lg"
-                />
-                <h3 className="text-xl font-bold mb-3">{value.title}</h3>
-                <p className="text-base text-muted-foreground leading-relaxed">
-                  {value.description}
-                </p>
-              </motion.div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {coreValues.map((value, idx) => {
+              const Icon = value.icon;
+              return (
+                <motion.div
+                  key={value.title}
+                  {...fadeUp(30)}
+                  transition={{ delay: idx * baseDelay, duration: 0.4 }}
+                >
+                  <Card className="glass-card hover-lift h-full">
+                    <CardContent className="p-6 text-center">
+                      <Icon
+                        className="w-12 h-12 text-secondary mx-auto mb-4"
+                        aria-hidden="true"
+                        focusable="false"
+                      />
+                      <h3 className="text-lg font-semibold mb-3">{value.title}</h3>
+                      <p className="text-sm text-muted-foreground">{value.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </div>
         </motion.section>
 
@@ -243,6 +266,7 @@ export default function About() {
           <h2 id="highlights-heading" className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">
             Department Highlights
           </h2>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             <div className="glass-card p-6 rounded-xl hover-lift">
               <div className="text-3xl sm:text-4xl font-bold text-primary mb-1 sm:mb-2">10+</div>
@@ -251,6 +275,7 @@ export default function About() {
                 A decade of providing quality IT education and research opportunities
               </p>
             </div>
+
             <div className="glass-card p-6 rounded-xl hover-lift">
               <div className="text-3xl sm:text-4xl font-bold text-secondary mb-1 sm:mb-2">500+</div>
               <div className="text-base sm:text-lg font-medium mb-2">Graduates</div>
@@ -258,6 +283,7 @@ export default function About() {
                 Alumni working in leading tech companies worldwide
               </p>
             </div>
+
             <div className="glass-card p-6 rounded-xl hover-lift">
               <div className="text-3xl sm:text-4xl font-bold text-accent mb-1 sm:mb-2">25+</div>
               <div className="text-base sm:text-lg font-medium mb-2">Research Projects</div>
@@ -278,30 +304,36 @@ export default function About() {
           <h2 id="journey-heading" className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-10">
             Our Journey
           </h2>
+
           <div className="relative max-w-4xl mx-auto">
+            {/* Timeline line */}
             <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/70 to-primary/30"></div>
+            
             <div className="space-y-8">
-              {timeline.map((item, idx) => (
-                <motion.article
-                  key={`${item.year}-${item.event.slice(0, 12)}`}
-                  {...fadeLeft(30)}
-                  transition={{ delay: idx * (prefersReducedMotion ? 0 : 0.2), duration: 0.4 }}
+            {timeline.map((item, idx) => (
+              <motion.article
+                key={`${item.year}-${item.event.slice(0, 12)}`}
+                {...fadeLeft(30)}
+                transition={{ delay: idx * (prefersReducedMotion ? 0 : 0.2), duration: 0.4 }}
                   className="relative flex items-start gap-6"
-                  aria-label={`Milestone ${idx + 1}: ${item.year}`}
+                aria-label={`Milestone ${idx + 1}: ${item.year}`}
                 >
+                  {/* Timeline dot */}
                   <div className="relative z-10 flex-shrink-0">
                     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center shadow-lg ring-4 ring-background">
                       <span className="text-white font-bold text-sm">{idx + 1}</span>
                     </div>
                   </div>
+                  
+                  {/* Content */}
                   <div className="flex-1 min-w-0 pt-2">
                     <div className="glass-card p-6 rounded-xl hover-lift">
                       <h3 className="text-xl sm:text-2xl font-bold text-primary mb-2">{item.year}</h3>
                       <p className="text-muted-foreground leading-relaxed text-base sm:text-lg">{item.event}</p>
                     </div>
-                  </div>
-                </motion.article>
-              ))}
+                </div>
+              </motion.article>
+            ))}
             </div>
           </div>
         </motion.section>

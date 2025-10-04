@@ -79,7 +79,7 @@ export default function Home() {
                     Message from Coordinator & HOD
                   </h3>
                   <p className="text-primary font-medium">
-                    Dr. Yash Paul — Coordinator & Head of Department
+                    Dr. Yash Paul, Coordinator & Head of Department
                   </p>
                 </header>
 

@@ -71,7 +71,7 @@ export function Navigation() {
               <GraduationCap className="w-6 h-6 text-white" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-bold text-foreground">CUK IT</h1>
+              <h1 className="text-lg font-bold text-foreground">Information Technology</h1>
               <p className="text-xs text-muted-foreground">
                 Department of Information Technology
               </p>

@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import aboutHero from '@/assets/about-hero.jpg';
 
-// Correct image imports (PNG format as per your folder)
+// Import PNG images
 import CollaborationImg from '@/assets/Collabiration.png';
 import InnovationImg from '@/assets/Innovation.png';
 import IntegrityImg from '@/assets/Integrity.png';
@@ -206,35 +206,27 @@ export default function About() {
           </div>
         </section>
 
-        {/* Core Values Section */}
+        {/* Core Values Section - Open, modern layout */}
         <motion.section
           aria-labelledby="values-heading"
           className="mb-12 sm:mb-16"
           {...fadeUp(40)}
           transition={{ delay: prefersReducedMotion ? 0 : 0.7, duration: 0.5 }}
         >
-          <h2 id="values-heading" className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-10">
+          <h2 id="values-heading" className="text-2xl sm:text-3xl font-bold text-center mb-12 sm:mb-16">
             Our Core Values
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {coreValues.map((value, idx) => (
-              <motion.div
-                key={value.title}
-                {...fadeUp(30)}
-                transition={{ delay: idx * baseDelay, duration: 0.4 }}
-              >
-                <Card className="glass-card hover-lift h-full">
-                  <CardContent className="p-6 text-center flex flex-col items-center">
-                    <img
-                      src={value.image}
-                      alt={value.title}
-                      className="w-20 h-20 mx-auto mb-4 rounded-xl object-contain shadow-lg bg-white/80 p-2"
-                    />
-                    <h3 className="text-lg font-semibold mb-3">{value.title}</h3>
-                    <p className="text-sm text-muted-foreground">{value.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
+          <div className="flex flex-col gap-10 md:flex-row md:gap-16 items-center justify-center">
+            {coreValues.map((value) => (
+              <div key={value.title} className="flex flex-col items-center max-w-xs">
+                <img
+                  src={value.image}
+                  alt={value.title}
+                  className="w-24 h-24 mb-4 rounded-xl object-cover shadow-md"
+                />
+                <h3 className="text-lg font-semibold text-center mb-2">{value.title}</h3>
+                <p className="text-sm text-muted-foreground text-center">{value.description}</p>
+              </div>
             ))}
           </div>
         </motion.section>

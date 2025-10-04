@@ -192,7 +192,7 @@ export default function About() {
                   Message from Coordinator & HOD
                 </h2>
                 <p className="text-primary font-medium">
-                  Dr. Yash Paul — Coordinator & Head of Department
+                  Dr. Yash Paul, Coordinator & Head of Department
                 </p>
               </header>
 

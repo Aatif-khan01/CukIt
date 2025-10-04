@@ -137,30 +137,6 @@ export default function About() {
       </div>
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        {/* Mission & Vision Cards */}
-        <section className="mb-12 sm:mb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {highlights.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <motion.div
-                  key={item.title}
-                  {...fadeUp(30)}
-                  transition={{ delay: idx * baseDelay, duration: 0.4 }}
-                >
-                  <Card className="glass-card hover-lift h-full">
-                    <CardContent className="p-6 text-center">
-                      <Icon className="w-12 h-12 text-primary mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground">{item.description}</p>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
-        </section>
-
         {/* HOD Message Section */}
         <motion.section
           aria-labelledby="hod-heading"
@@ -219,6 +195,30 @@ export default function About() {
             </div>
           </div>
         </motion.section>
+
+        {/* Mission, Vision, Student Focus, Excellence Cards */}
+        <section className="mb-12 sm:mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {highlights.map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <motion.div
+                  key={item.title}
+                  {...fadeUp(30)}
+                  transition={{ delay: idx * baseDelay, duration: 0.4 }}
+                >
+                  <Card className="glass-card hover-lift h-full">
+                    <CardContent className="p-6 text-center">
+                      <Icon className="w-12 h-12 text-primary mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
+                      <p className="text-sm text-muted-foreground">{item.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+        </section>
 
         {/* Core Values Section */}
         <motion.section
